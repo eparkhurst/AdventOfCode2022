@@ -40,7 +40,6 @@ const run = (lines: string[]) => {
             x += Number(arr[1]);
         }
     }
-    console.log(crt);
     const image = [
         crt.slice(0, 40),
         crt.slice(40, 80),
