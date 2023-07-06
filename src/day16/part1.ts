@@ -39,35 +39,45 @@ const run = (lines: string[]) => {
     console.log(valves);
 
     const memo: Memo = {};
-    let count = 0;
+
     const recur = (label: string, time: number, rate: number, openValves: any): number => {
-        if (time <= 0) {
-            count++;
+        // times up, return rate
+        if (time == 1) {
             return rate;
         }
+        //add to memo
         if (memo[label]) {
-            if (memo[label][time] > rate) return memo[label][time];
+            if (memo[label][time] > rate) return rate;
             memo[label][time] = rate;
         } else {
             memo[label] = { [time]: rate };
         }
-        let maxPressure = 0;
+
         const valve = valves[label];
-        for (let i = 0; i < valve.tunnels.length; i++) {
-            let r1 = -1;
-            let r2 = -1;
-            if (valve.rate && !openValves[label]) {
-                openValves[label] = true;
-                r1 = valve.rate + recur(valve.tunnels[i], time - 2, rate + valve.rate, { ...openValves });
-            }
-            r2 = recur(valve.tunnels[i], time - 1, rate, { ...openValves });
-            maxPressure = Math.max(maxPressure, r1, r2);
+
+        //stay put
+        const stay = recur(label, time - 1, rate, { ...openValves });
+        //open a valve
+        let open = 0;
+        if (valve.rate && !openValves[label]) {
+            open = recur(label, time - 1, rate + valve.rate, { ...openValves, [label]: true });
         }
-        return rate + maxPressure;
+
+        //move to another valve
+        let move = 0;
+
+        for (let i = 0; i < valve.tunnels.length; i++) {
+            const newValve = recur(valve.tunnels[i], time - 1, rate, { ...openValves });
+            move = Math.max(move, newValve);
+        }
+
+        return rate + Math.max(move, open, stay);
     };
 
     const final = recur('AA', 30, 0, {});
-    console.log(final, count);
+    console.log(final);
 };
+
+// 1852 too low
 
 export {};
