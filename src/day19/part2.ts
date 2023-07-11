@@ -41,10 +41,6 @@ const recur = (
     time: number,
     memo: any,
 ): number => {
-    // if (count < 40) {
-    //     console.log(time, resources, robots);
-    //     count++;
-    // }
     if (time === 0) {
         return resources.geode;
     }
@@ -54,7 +50,6 @@ const recur = (
     if (memo[key]) {
         return memo[key];
     }
-    //99lkjdshfoiuahsdfipjnsdf
 
     let maxGeodes = resources.geode + robots.geode * time;
     const robotArr = Object.keys(bluePrint) as Robot[];
@@ -153,11 +148,6 @@ const run = (bluePrints: any[]) => {
     console.log('blueprints', bluePrints[0]);
     const geode = runBluePrint(bluePrints[0]);
     console.log('geode', geode);
-    // const final = blueprints.reduce((max: number, bluePrint: any, i: number) => {
-    //     max += (i + 1) * geode;
-    //     return max;
-    // }, 0);
-    // console.log(final);
 };
 
 export {};
